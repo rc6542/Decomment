@@ -173,9 +173,7 @@ int main(void) {
         if (c == '\n') {
         lineNumber++;
     }
-        if (state == SLASH && c == '*') {
-            commentLineNumber = lineNumber;
-        }
+        
         switch(state) {
             case NORMAL:
                 state = handleNormalState(c);
