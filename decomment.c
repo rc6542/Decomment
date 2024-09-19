@@ -190,7 +190,7 @@ int main(void) {
             case POTENTIAL_END:
                 state = handlePotentialEndState(c);
                 if (state == NORMAL) {
-                    commentLineNumber == 0;
+                    commentLineNumber = 0;
                 }
                 break;
             case SINGLE_QUOTE:
