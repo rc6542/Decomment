@@ -166,11 +166,16 @@ enum Statetype handleStringLitBackslashState(int c) {
 int main(void) {
     int c;
     int lineNumber;
+    int commentLineNumber;
     enum Statetype state = NORMAL;
 
     while((c = getchar()) != EOF) {
         if (c == '\n') {
             lineNumber++;
+        }
+
+        if (state = SLASH && c == '*') {
+            commentLineNumber = lineNumber;
         }
 
         switch(state) {
