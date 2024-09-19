@@ -180,7 +180,7 @@ int main(void) {
                 break;
             case SLASH:
                 state = handleSlashState(c);
-                if (state == COMMENT && commentLineNumber == 0) {
+                if (state == COMMENT) {
                     commentLineNumber = lineNumber;
                 }
                 break;
@@ -189,9 +189,6 @@ int main(void) {
                 break;
             case POTENTIAL_END:
                 state = handlePotentialEndState(c);
-                if (state == NORMAL) {
-                    commentLineNumber = 0;
-                }
                 break;
             case SINGLE_QUOTE:
                 state = handleSingleQuoteState(c);
