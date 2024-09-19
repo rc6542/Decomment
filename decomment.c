@@ -174,16 +174,15 @@ int main(void) {
             lineNumber++;
         }
 
-        if (state = SLASH && c == '*') {
-            commentLineNumber = lineNumber;
-        }
-
         switch(state) {
             case NORMAL:
                 state = handleNormalState(c);
                 break;
             case SLASH:
                 state = handleSlashState(c);
+                if (state = COMMENT) {
+                    commentLineNumber = lineNumber;
+                }
                 break;
             case COMMENT:
                 state = handleCommentState(c);
