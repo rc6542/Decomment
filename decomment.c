@@ -5,9 +5,10 @@
 enum Statetype{NORMAL, SLASH, COMMENT, POTENTIAL_END, SINGLE_QUOTE, 
     DOUBLE_QUOTE, CHARLIT_BACKSLASH, STRLIT_BACKSLASH};
 
-/*  Implements the normal state of the DFA. c is the current character 
-in the DFA.Checks the current character and put a char except /, where 
-it can be a potential comment. Returns the next state. */
+/*  Implements the normal state of the DFA. Prints to stdout as 
+determined by the DFA. Returns state of either SLASH, SINGLE_QUOTE, 
+DOUBLE_QUOTE, or NORMAL depending on value of c, the current character 
+from stdin. */
 enum Statetype handleNormalState(int c) {
     enum Statetype state;
     if (c == '/') {
@@ -32,8 +33,10 @@ enum Statetype handleNormalState(int c) {
     return state;
 }
 
-/*  Implements the SLASH state, or when a slash is encountered in the 
-DFA. c is the current character in the DFA. Returns the next state. */
+/*  Implements the SLASH state, when a slash is encountered. Prints to 
+stdout as determined by the DFA. Returns state of either SLASH, 
+SINGLE_QUOTE, DOUBLE_QUOTE, or COMMENT depending on value of c, the 
+current character from stdin. */
 enum Statetype handleSlashState(int c) {
     enum Statetype state;
     
@@ -68,8 +71,10 @@ enum Statetype handleSlashState(int c) {
     return state;
 }
 
-/*  Implements the COMMENT state, or when a comment starts in the DFA. c
-is the current character in the DFA. Returns the next state. */
+/*  Implements the COMMENT state which handles the in-comment part of 
+the DFA. Prints to stdout as determined by the DFA. Returns either 
+POTENTIAL_END or COMMENT states depending on value of c, the current 
+character from stdin. */
 enum Statetype handleCommentState(int c) {
     enum Statetype state;
     if (c == '*') {
@@ -86,9 +91,10 @@ enum Statetype handleCommentState(int c) {
     return state;
 }
 
-/*  Implements the POTENTIAL_END state, or checking for a potential 
-comment termination in the DFA. c is the current character in the DFA. 
-Returns the next state. */
+/*  Implements the POTENTIAL_END state which checks for a potential 
+comment termination. Prints to stdout as determined by the DFA. Returns
+a POTENTIAL_END, NORMAL, or COMMENT state depending on value of c, the 
+current character from stdin.*/
 enum Statetype handlePotentialEndState(int c) {
     enum Statetype state;
     if (c == '*') {
@@ -109,9 +115,10 @@ enum Statetype handlePotentialEndState(int c) {
     return state;
 }
 
-/*  Implements the SINGLE_QUOTE state, or when a '\'' is encountered in 
-the DFA. c is the current character in the DFA. Returns the next state. 
-*/
+/*  Implements the SINGLE_QUOTE state when ' is encountered. Prints to 
+stdout as determined by the DFA. Returns CHARLIT_BACKSLASH, NORMAL, or 
+SINGLE_QUOTE state depending on value of c, the current character from 
+stdin. */
 enum Statetype handleSingleQuoteState(int c) {
     enum Statetype state;
     if (c == '\\') { 
@@ -132,9 +139,10 @@ enum Statetype handleSingleQuoteState(int c) {
     return state;
 }
 
-/*  Implements the DOUBLE_QUOTE state, or when a '"' is encountered in 
-the DFA. c is the current character in the DFA. Returns the next state. 
-*/
+/*  Implements the DOUBLE_QUOTE state when a " is encountered. Prints to
+stdout as determined by the DFA. Returns a STRLIT_BACKSLASH, NORMAL, 
+DOUBLE_QUOTE state depending on value of c, the current character from 
+stdin. */
 enum Statetype handleDoubleQuoteState(int c) {
     enum Statetype state;
     if (c == '\\') { 
@@ -155,9 +163,10 @@ enum Statetype handleDoubleQuoteState(int c) {
     return state;
 }
 
-/*  Implements the CHARLIT_BACKSLASH state, or when an escape character 
-is encountered in the SINGLE_QUOTE state of the DFA. c is the current 
-character in the DFA. Returns the next state. */
+/*  Implements the CHARLIT_BACKSLASH state when an escape character 
+is encountered inside a character literal. Prints to stdout as 
+determined by the DFA. Returns SINGLE_QUOTE state regardless of value c, 
+the current character from stdin. */
 enum Statetype handleCharLitBackslashState(int c) {
     enum Statetype state;
     state = SINGLE_QUOTE;
@@ -165,9 +174,10 @@ enum Statetype handleCharLitBackslashState(int c) {
     return state;
 }
 
-/*  Implements the STRLIT_BACKSLASH state, or when an escape character 
-is encountered in the DOUBLE_QUOTE state of the DFA. c is the current 
-character in the DFA. Returns the next state. */
+/*  Implements the STRLIT_BACKSLASH state when an escape character 
+is encountered inside a string literal. Prints to stdout as determined 
+by the DFA. Returns DOUBLE_QUOTE state regardless of value c, the 
+current character from stdin. */
 enum Statetype handleStringLitBackslashState(int c) {
     enum Statetype state;
     state = DOUBLE_QUOTE;
@@ -175,7 +185,6 @@ enum Statetype handleStringLitBackslashState(int c) {
     return state;
 }
 
-/* */
 int main(void) {
     /* stores character from stdin*/
     int c;
@@ -231,9 +240,11 @@ int main(void) {
         putchar('/');
     }
 
-    /* displays and error and line number of an unterminated comment */
+    /* prints to stderr an error message and line number of an 
+    unterminated comment */
     if (state == COMMENT ||state == POTENTIAL_END) {
-        fprintf(stderr, "Error: line %i: unterminated comment\n", commentLineNumber);
+        fprintf(stderr, "Error: line %i: unterminated comment\n", 
+            commentLineNumber);
         return EXIT_FAILURE;
     }
 
