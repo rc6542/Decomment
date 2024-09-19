@@ -165,7 +165,7 @@ enum Statetype handleStringLitBackslashState(int c) {
 /* */
 int main(void) {
     int c;
-    int lineNumber;
+    int lineNumber = 1;
     int commentLineNumber;
     enum Statetype state = NORMAL;
 
