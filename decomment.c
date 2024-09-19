@@ -185,6 +185,11 @@ enum Statetype handleStringLitBackslashState(int c) {
     return state;
 }
 
+/* Takes a file and decomments it. Reads characters from stdin, and 
+prints to stdout without comments. Returns EXIT_SUCCESS if reached end 
+of file with terminated comments. Returns EXIT_FAILURE if reached end of
+file with unterminated comments, and prints to stderr an error and the 
+line number. */
 int main(void) {
     /* stores character from stdin*/
     int c;
