@@ -169,7 +169,7 @@ int main(void) {
     enum Statetype state = NORMAL;
 
     while((c = getchar()) != EOF) {
-        if (c == "\n") {
+        if (c = "\n") {
             lineNumber++;
         }
 
