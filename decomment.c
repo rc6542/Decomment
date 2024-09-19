@@ -173,25 +173,21 @@ int main(void) {
         if (c == '\n') {
         lineNumber++;
     }
-
+        if (state == SLASH && c == '*') {
+            commentLineNumber = lineNumber;
+        }
         switch(state) {
             case NORMAL:
                 state = handleNormalState(c);
                 break;
             case SLASH:
                 state = handleSlashState(c);
-                if (state == COMMENT && commentLineNumber == 0) {
-                    commentLineNumber = lineNumber;  
-                }
                 break;
             case COMMENT:
                 state = handleCommentState(c);
                 break;
             case POTENTIAL_END:
                 state = handlePotentialEndState(c);
-                if (state == NORMAL) {
-                    commentLineNumber = 0;  
-                }
                 break;
             case SINGLE_QUOTE:
                 state = handleSingleQuoteState(c);
