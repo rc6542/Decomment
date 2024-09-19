@@ -169,11 +169,7 @@ int main(void) {
     int commentLineNumber;
     enum Statetype state = NORMAL;
 
-    while((c = getchar()) != EOF) {
-        if (c == '\n') {
-            lineNumber++;
-        }
-        
+    while((c = getchar()) != EOF) {   
         switch(state) {
             case NORMAL:
                 state = handleNormalState(c);
@@ -203,6 +199,10 @@ int main(void) {
                 state = handleStringLitBackslashState(c);
                 break;
         }
+    }
+
+    if (c == '\n') {
+        lineNumber++;
     }
 
     if (state == SLASH) {
