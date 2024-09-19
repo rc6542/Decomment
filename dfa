@@ -1,0 +1,40 @@
+START (accept) <---- start state
+    /: SLASH
+    ': SINGLE_QUOTE
+    ": DOUBLE_QUOTE
+    other: START
+
+SLASH (accept)
+    /: SLASH
+    ': SINGLE_QUOTE
+    ": DOUBLE_QUOTE
+    *: COMMENT
+    other: NORMAL
+
+COMMENT (reject)
+    *: POTENTIAL_END
+    other: COMMENT
+
+POTENTIAL_END (reject)
+    *: POTENTIAL_END
+    /: NORMAL
+    other: COMMENT
+
+SINGLE_QUOTE (accept)
+    \: CHARLIT_BACKSLASH
+    ': NORMAL
+    other: SINGLE_QUOTE
+
+DOUBLE_QUOTE (accept)
+    \: STRLIT_BACKSLASH
+    ": NORMAL
+    other: DOUBLE_QUOTE
+
+CHARLIT_BACKSLASH (accept)
+    any: SINGLE_QUOTE
+
+STRLIT_BACKSLASH (accept)
+    any: DOUBLE_QUOTE
+
+
+
