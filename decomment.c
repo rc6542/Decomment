@@ -175,28 +175,28 @@ int main(void) {
 
         switch(state) {
             case NORMAL:
-                state = handleNormalState;
+                state = handleNormalState(c);
                 break;
             case SLASH:
-                state = handleSlashState;
+                state = handleSlashState(c);
                 break;
             case COMMENT:
-                state = handleCommentState;
+                state = handleCommentState(c);
                 break;
             case POTENTIAL_END:
-                state = handlePotentialEndState;
+                state = handlePotentialEndState(c);
                 break;
             case SINGLE_QUOTE:
-                state = handleSingleQuoteState;
+                state = handleSingleQuoteState(c);
                 break;
             case DOUBLE_QUOTE:
-                state = handleDoubleQuoteState;
+                state = handleDoubleQuoteState(c);
                 break;
             case CHARLIT_BACKSLASH:
-                state = handleCharLitBackslashState;
+                state = handleCharLitBackslashState(c);
                 break;
             case STRLIT_BACKSLASH:
-                state = handleStringLitBackslashState;
+                state = handleStringLitBackslashState(c);
                 break;
         }
     }
