@@ -166,7 +166,7 @@ enum Statetype handleStringLitBackslashState(int c) {
 int main(void) {
     int c;
     int lineNumber = 1;
-    int commentLineNumber;
+    int commentLineNumber = 0;
     enum Statetype state = NORMAL;
 
     while((c = getchar()) != EOF) {   
@@ -180,8 +180,8 @@ int main(void) {
                 break;
             case SLASH:
                 state = handleSlashState(c);
-                if (state == COMMENT) {
-                    commentLineNumber = lineNumber;
+                if (state == COMMENT && commentLineNumber == 0) {
+                    commentLineNumber = lineNumber;  
                 }
                 break;
             case COMMENT:
@@ -189,6 +189,9 @@ int main(void) {
                 break;
             case POTENTIAL_END:
                 state = handlePotentialEndState(c);
+                if (state == NORMAL) {
+                    commentLineNumber = 0;  
+                }
                 break;
             case SINGLE_QUOTE:
                 state = handleSingleQuoteState(c);
