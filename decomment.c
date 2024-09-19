@@ -170,13 +170,17 @@ int main(void) {
     enum Statetype state = NORMAL;
 
     while((c = getchar()) != EOF) {
+        if (c == '\n') {
+            lineNumber++;
+        }
+        
         switch(state) {
             case NORMAL:
                 state = handleNormalState(c);
                 break;
             case SLASH:
                 state = handleSlashState(c);
-                if (state = COMMENT) {
+                if (state == COMMENT) {
                     commentLineNumber = lineNumber;
                 }
                 break;
@@ -201,10 +205,6 @@ int main(void) {
         }
     }
 
-    if (c == '\n') {
-            lineNumber++;
-        }
-        
     if (state == SLASH) {
         putchar('/');
     }
