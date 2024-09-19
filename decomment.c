@@ -5,8 +5,9 @@
 enum Statetype{NORMAL, SLASH, COMMENT, POTENTIAL_END, SINGLE_QUOTE, 
     DOUBLE_QUOTE, CHARLIT_BACKSLASH, STRLIT_BACKSLASH};
 
-/*  Implements the normal state of the DFA. c is the current DFA character.
-    Checks the current character and put a char except /, where it can be a potential comment.  */
+/*  Implements the normal state of the DFA. c is the current character 
+in the DFA.Checks the current character and put a char except /, where 
+it can be a potential comment. Returns the next state. */
 enum Statetype handleNormalState(int c) {
     enum Statetype state;
     if (c == '/') {
@@ -31,7 +32,8 @@ enum Statetype handleNormalState(int c) {
     return state;
 }
 
-/*  Implements the slash state of the DFA. */
+/*  Implements the SLASH state, or when a slash is encountered in the 
+DFA. c is the current character in the DFA. Returns the next state. */
 enum Statetype handleSlashState(int c) {
     enum Statetype state;
     
@@ -66,7 +68,8 @@ enum Statetype handleSlashState(int c) {
     return state;
 }
 
-/* */
+/*  Implements the COMMENT state, or when a comment starts in the DFA. c
+is the current character in the DFA. Returns the next state. */
 enum Statetype handleCommentState(int c) {
     enum Statetype state;
     if (c == '*') {
@@ -83,7 +86,9 @@ enum Statetype handleCommentState(int c) {
     return state;
 }
 
-/* */
+/*  Implements the POTENTIAL_END state, or checking for a potential 
+comment termination in the DFA. c is the current character in the DFA. 
+Returns the next state. */
 enum Statetype handlePotentialEndState(int c) {
     enum Statetype state;
     if (c == '*') {
@@ -104,7 +109,9 @@ enum Statetype handlePotentialEndState(int c) {
     return state;
 }
 
-/* */
+/*  Implements the SINGLE_QUOTE state, or when a '\'' is encountered in 
+the DFA. c is the current character in the DFA. Returns the next state. 
+*/
 enum Statetype handleSingleQuoteState(int c) {
     enum Statetype state;
     if (c == '\\') { 
@@ -125,7 +132,9 @@ enum Statetype handleSingleQuoteState(int c) {
     return state;
 }
 
-/* */
+/*  Implements the DOUBLE_QUOTE state, or when a '"' is encountered in 
+the DFA. c is the current character in the DFA. Returns the next state. 
+*/
 enum Statetype handleDoubleQuoteState(int c) {
     enum Statetype state;
     if (c == '\\') { 
@@ -146,7 +155,9 @@ enum Statetype handleDoubleQuoteState(int c) {
     return state;
 }
 
-/* */
+/*  Implements the CHARLIT_BACKSLASH state, or when an escape character 
+is encountered in the SINGLE_QUOTE state of the DFA. c is the current 
+character in the DFA. Returns the next state. */
 enum Statetype handleCharLitBackslashState(int c) {
     enum Statetype state;
     state = SINGLE_QUOTE;
@@ -154,7 +165,9 @@ enum Statetype handleCharLitBackslashState(int c) {
     return state;
 }
 
-/* */
+/*  Implements the STRLIT_BACKSLASH state, or when an escape character 
+is encountered in the DOUBLE_QUOTE state of the DFA. c is the current 
+character in the DFA. Returns the next state. */
 enum Statetype handleStringLitBackslashState(int c) {
     enum Statetype state;
     state = DOUBLE_QUOTE;
@@ -164,18 +177,27 @@ enum Statetype handleStringLitBackslashState(int c) {
 
 /* */
 int main(void) {
+    /* stores character from stdin*/
     int c;
+    /* tracks the line number*/
     int lineNumber = 1;
+    /* tracks the line number of most recent comment start*/
     int commentLineNumber = 0;
+    /* start state of DFA*/
     enum Statetype state = NORMAL;
 
+    /* reads each char from stdin*/
     while((c = getchar()) != EOF) {   
+        /* increments line number*/
         if (c == '\n') {
         lineNumber++;
     }
+        /* sets line number of most recent comment to current line 
+        number */
         if (state == SLASH && c == '*') {
             commentLineNumber = lineNumber;
         }
+        /* all possible states of DFA */
         switch(state) {
             case NORMAL:
                 state = handleNormalState(c);
@@ -204,10 +226,12 @@ int main(void) {
         }
     }
 
+    /* corner case if code ends in a slash */
     if (state == SLASH) {
         putchar('/');
     }
 
+    /* displays and error and line number of an unterminated comment */
     if (state == COMMENT ||state == POTENTIAL_END) {
         fprintf(stderr, "Error: line %i: unterminated comment\n", commentLineNumber);
         return EXIT_FAILURE;
